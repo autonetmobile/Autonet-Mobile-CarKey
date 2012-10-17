@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Autonet Mobile</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="../../../javascripts/jquery.mobile-1.0/jquery.mobile-1.0.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="../../../javascripts/jquery.mobile-1.0/jquery.mobile.structure-1.0.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="../../../stylesheets/jquery.alerts.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="../../../stylesheets/styles.css" type="text/css" media="screen" title="no title" charset="utf-8">
+     
+    <script type="text/javascript" src="../../../javascripts/phonegap-1.1.0-combined.js"></script>    
+    <!-- Android phonegap.js -->
+    <!-- <script type="text/javascript" src="../../../javascripts/phonegap-1.1.0.js"></script> -->
+    <!-- iOS Phonegap.js -->
+    <!-- <script type="text/javascript" src="../../../javascripts/phonegap-1.1.0-ios.js"></script> -->
+    <script src="../../../javascripts/websocket.js" type="text/javascript" charset="utf-8"></script> <!-- Android WebSocket Implementation -->
+    <script src="../../../javascripts/TemporaryAlert.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../../../javascripts/jquery-1.6.4.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../javascripts/jQuery.dPassword.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../javascripts/jquery.mobile-1.0/jquery.mobile-1.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../javascripts/js-model-0.10.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/models/AutonetApplication.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/models/AutonetConnection.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/models/UserCredentials.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/controllers/LoginController.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/controllers/SettingsController.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/models/Unit.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../app/controllers/KeychainController.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../javascripts/jquery.alerts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../javascripts/iscroll.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script type="text/javascript">
+      var launched = false;
+      document.addEventListener("deviceready", function() {
+        if (launched == false) {
+          launched = true
+          AutonetApplication.debugLog("Phonegap Ready");
+          AutonetApplication.launch();
+
+          // Register a onResume function to be used for showing the "login" page if a user does not have a pw saved in the keychain
+          document.addEventListener("resume", function() { 
+            if (localStorage.lastUnitID) {
+              var unit = Unit.findByUnitID(localStorage.lastUnitID);
+
+              if (!unit.attributes.password) {
+                KeychainController.requestUnitPassword(unit,
+                  function(password) {
+                    unit.attr("password", password);
+                    openFunction(creds.attr('password'));
+                  },
+                  function() {
+                    unit.attr("password", null);
+                    openFunction(creds.attr('password'));
+                  }
+                );
+              }
+            }
+          }, false);
+        }
+      }, false);
+      
+    </script>
+  </head>
+  <body>
+    <div data-role="page" id='init' class='content'>
+    </div><!-- /page -->
+  </body>
+</html>

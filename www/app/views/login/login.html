@@ -1,0 +1,114 @@
+<div data-role="page" id='login'>
+  <div data-role="header">
+    <h1>Autonet Mobile Login</h1>
+  </div>
+  <div data-role="content"> 
+    <div class="shrink">
+      <span class="label">Email:&nbsp;</span>
+      <input type="email" name="email" autocomplete="off" autocorrect="off" id="email" value=""  />
+    </div>
+    <div class="shrink">
+      <span class="label">Remote PIN:&nbsp;</span>
+      <input type="password" name="password" id="password" value=""  />
+    </div>
+    <div id="phone-number-div"  class="shrink">
+      <span class="label">Phone Number:&nbsp;</label>
+      <input type="tel" name="phone_number" id="phone_number" value="" />
+      <input type='text' style="width:0px;height:0px;zindex:-1;left:20px;top=-20px;position:absolute;opacity:0;" id='tempField' onfocus="$('#tempField').blur();"/>
+    </div>
+    <div id='provider-picker'>
+    </div>
+    <div>
+      <a href="#" data-role="button" onclick="LoginController.loginButtonWasPressed();">Login</a>
+    </div>                                                                                       
+  </div>
+  <style>
+    span.label {
+      font-size:16px;
+      text-shadow:none;
+    }
+    div.shrink {
+      font-size:16px;
+      text-shadow:none;
+    }
+    input {
+      z-index:10000;
+    }
+  </style>
+  <script type="text/javascript">
+    var populateProviders = function(json) {
+      AutonetApplication.debugLog("Populating Providers: " + json);
+      var objects = JSON.parse(json);
+      var options = "<select name='provider' id='provider'><option value=''>- Select Provider -</option>";
+      for (i=0;i<objects.length;i++) {
+        var obj = objects[i];
+        options += "<option " + " value='" + obj.gateway + "'>" + obj.name + "</option>";
+      }
+      options += "</select>";
+      var provider = $("#provider-picker");
+      AutonetApplication.debugLog("provider: " + provider);
+      AutonetApplication.debugLog("Options: " + options);
+      provider.html(options);
+      if (AutonetApplication.getUserCredentials()) {
+        $("#provider").val(AutonetApplication.getUserCredentials().attr('providerServer'));
+      }
+      $("#provider").selectmenu();
+    };
+    var loadProviders = function(retries) {
+      var retryCount;
+      retryCount = retries || 0;
+      var url = "https://" + AutonetApplication.host + "/api/providers.json";
+      var request = $.ajax({
+        url: url,
+        // timeout:10000,
+        dataType:'html',
+        error: function() {
+          if (retryCount < 10) {
+            setTimeout(function() {
+              loadProviders(retryCount+1);
+            }, 1000);
+            return;
+          }
+          AutonetApplication.confirm(AutonetApplication.httpErrorMessage,
+            function(){
+              //success
+              loadProviders();
+            }
+          );
+        },
+        success: function(){
+          // setup new failure callback.
+          populateProviders(request.responseText);
+        }
+      });
+    };
+    var loginLoaded = function() {
+      AutonetApplication.debugLog("login.live");
+      // Restore values if we have them.
+      AutonetApplication.userCredentials = UserCredentials.first();
+      if (AutonetApplication.userCredentials) {
+        $("#email").val(AutonetApplication.userCredentials.attr('email'));
+        $("#password").val(AutonetApplication.userCredentials.attr('password'));
+      }                                                                         
+      if (AutonetApplication.userCredentials && AutonetApplication.userCredentials.attr('phoneNumber')) {
+        $("#phone_number").val(AutonetApplication.userCredentials.attr('phoneNumber'));
+        $("#provider").val(AutonetApplication.userCredentials.attr('providerServer'));
+        $("#phone-number-div").hide();
+        $("#provider").hide();
+      } else {
+        // Load providers
+        loadProviders();
+      }
+    }
+    $('#login').die();
+    $('#login').live('pagecreate', function() { 
+       setTimeout(loginLoaded, 10);
+       if (AutonetApplication.displayCreateAccount == true) {
+         $("#create-button").show();
+       }
+    });
+  </script>
+</div>
+
+
+

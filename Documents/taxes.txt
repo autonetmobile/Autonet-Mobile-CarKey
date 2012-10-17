@@ -1,0 +1,4 @@
+taxes:
+
+24000 fed
+5900 state

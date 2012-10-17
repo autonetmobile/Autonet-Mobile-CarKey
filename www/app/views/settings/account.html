@@ -1,0 +1,94 @@
+<div data-role="page" id='my-account'>
+  <div data-role="header">
+    <a href="#" onclick='SettingsController.settings({reverse: true});' data-icon="arrow-l">Settings</a>
+    <h1>My Account</h1>
+  </div><!-- /header -->
+  <div data-role="content"> 
+    <!-- <div data-role="fieldcontain"> -->
+      <div id="phone-number-div">
+        <label for="phone_number">Phone Number:&nbsp;</label>
+        <input type="tel" name="phone_number" id="phone_number" value = "" />
+      </div>
+      <div id='provider-picker'>
+      </div>
+      <br>
+      <div>
+        <a href="#" data-role="button" onclick="SettingsController.save($('#phone_number').val(), getProviderValue());">Save</a>
+      </div>
+      <div>
+        <a href="#" data-role="button" onclick="SettingsController.testSMS($('#phone_number').val(), getProviderValue());">Test SMS</a>
+      </div>
+    <!-- </div>  -->
+    <div>
+      <a href="#" onclick="KeychainController.showKeychain();" data-role="button">Go To Keychain</a>
+    </div>
+    <div>
+      <a href="#" data-role="button" onclick="AutonetApplication.logout();">Log Out</a>
+    </div>
+  </div>
+  
+  <script type="text/javascript">
+    function getProviderValue() {
+      var val = $('#provider').val();
+      if (val === undefined) {
+        val = UserCredentials.first().attr('providerServer');
+      }
+      return val;
+    }
+    var populateProviders = function(json) {
+      var objects = JSON.parse(json);
+      var options = "<select name='provider' id='provider'><option value=''>- Select Provider -</option>";
+      for (i=0;i<objects.length;i++) {
+        var obj = objects[i];
+        options += "<option " + " value='" + obj.gateway + "'>" + obj.name + "</option>";
+      }
+      options += "</select>";
+      var provider = $("#provider-picker");
+      provider.html(options);
+      $("#provider").val(UserCredentials.first().attr('providerServer'));
+      $("#provider").selectmenu();
+    };
+    var loadProviders = function(retries) {
+      var retryCount;
+      retryCount = retries || 0;
+      var url = "https://" + AutonetApplication.host + "/api/providers.json";
+      var request = $.ajax({
+        url: url,
+        // timeout:10000,
+        dataType:'html',
+        error: function() {
+          if (retryCount < 10) {
+            setTimeout(function() {
+              loadProviders(retryCount+1);
+            }, 1000);
+            return;
+          }
+          AutonetApplication.alert(AutonetApplication.httpErrorMessage,
+            function(){
+              //success
+              loadProviders();
+            }
+          );
+        },
+        success: function(){
+          // setup new failure callback.
+          populateProviders(request.responseText);
+        }
+      });
+    };
+    $('#my-account').die();
+    $('#my-account').live('pagecreate', function() {
+      // Restore values if we have them.
+      userCreds = UserCredentials.first();
+      if (userCreds) {
+        $("#email").val(userCreds.attr('email'));
+        $("#password").val(userCreds.attr('password'));
+        $("#phone_number").val(userCreds.attr('phoneNumber'));
+        loadProviders();
+      }
+    });
+  </script>
+</div>
+
+
+

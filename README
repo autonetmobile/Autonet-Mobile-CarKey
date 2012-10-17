@@ -1,0 +1,128 @@
+This is the README for the Autonet Mobile project. The project is laid out as follows:
+/
+  /Android - contains android project and android specific PhoneGap stuff.
+  /iOS - contains the iOS project and the iOS PhoneGap library
+  /www - contains the webapp that both Android and iOS are running. This is the heart of the project.
+          both iOS and Android implementations reference this directory.
+
+Configuring the Application:
+The Mobile application must be configured to point at the AutonetMobileWeb application. This is controlled in two places:
+  - AutonetApplication.js, as the "host"
+  - AutonetConnection.js, as the "primaryHost" and "secondaryHost"
+The primary and secondary hosts are used for the TCP proxy, which can be set up to run on two different servers entirely. The "host" is where the rails application is running. If redundancy is desired for the AutonetMobileWeb application, standard Rails scaling practices should be employed.
+
+Application Customization:
+This section details how to customize and re-release the Mobile application under different names. This assumes that you already have the developer tools installed and can build and run the application. We will cover how to customize the following:
+- Application Name
+- Application Icon
+- Application Identifier
+- Splash Screen
+- App Styling
+
+  Application Name:
+    iOS:
+      - Open iOS/AutonetMobile.xcodeproj
+      - Select the project file from the project browser on the left
+      - Select the AutonetMobile target (under "Targets")
+      - Select the "Build Settings" tab
+      - Change the "Product Name" setting to whatever you wish to name the application.
+    Android:
+      - Change the app_name string in Android/res/values/strings.xml to whatever you want the app name to be.
+  
+  Application Icon:
+    The following will tell you how to customize the application name for both iOS and Android.
+    iOS:
+      Replace the following icon image files with new images of the same size:
+        - iOS/Icon.png
+        - iOS/Icon@2x.png
+        - iOS/Icon-72.png
+    Android:
+      Replace the following icon image files with new images:
+        - Android/res/drawable-hdpi/icon.png
+        - Android/res/drawable-ldpi/icon.png
+        - Android/res/drawable-mdpi/icon.png
+  
+  Application Identifier:
+    In order to have multiple apps installed on the same device as well as in the App Store and Market, they must have unique identifiers. For each different deployment of the Autonet Mobile app, a new Application Identifier must be used.
+    iOS:
+      - Open iOS/AutonetMobile.xcodeproj
+      - Select the project file from the project browser on the left
+      - Select the AutonetMobile target (under "Targets")
+      - Select the "Summary" tab
+      - Change the "Identifier" to something else (like 'com.twotoasters.AutonetDodge').
+    Android:
+      find and replace the following string "com.twotoasters.AutonetMobile" with a new bundle identifier (such as "com.twotoasters.AutonetDodge") within the Android/ folder.
+      Make sure to run `ant clean` before building the app again.
+  
+  Splash Screen:
+    Both:
+      Replace www/assets/splash.png with the new splash screen image.
+    iOS:
+      Replace the following image files with new images of the same size:
+        - iOS/Default.png
+        - iOS/Default@2x.png
+    Android:
+      Replace the following icon image files with new images:
+        - Android/res/drawable-hdpi/splash.png
+        - Android/res/drawable-ldpi/splash.png
+        - Android/res/drawable-mdpi/splash.png
+  
+  App Styling:
+    Application styles are loaded from the web by using the appType parameter on AutonetApplication. To change the app type, open AutonetMobile.js and change the appType to the name of your new application. This should align with an Application Type name on the Autonet Mobile web service.
+
+Building the App:    
+
+Autonet Mobile Android:
+In order to build the Android Application, you need to have the Android SDK. It can be downloaded from http://developer.android.com/sdk/index.html
+
+Creating a debug build:
+First, make sure you have an android device plugged in or are running an Android emulator.
+  cd Android/
+then run the following command to build and install the app.
+  ant debug install
+This will compile the application and install it on whatever device is connected. You can find the .apk binary in /bin, if you wish to share it with other people/devices.
+
+Creating a release build:
+In order to create a Release build, you must first have an Android Market developer account. You can create one at http://market.android.com/publish if one has not already been created.
+A Release build must be code signed. Instructions on how to code sign can be found here: http://developer.android.com/guide/publishing/app-signing.html
+Follow the instructions for building with Ant.
+
+
+To Run the iOS App:
+In order to build and run the iOS application, you must have latest XCode and iOS SDK installed.
+In order to create a build that will run on an iOS device, the application must be code signed. Code signing options can be set in the "Build Settings" of the Autonet project. XCode uses a provisioning profile (downloaded from the iOS Provisioning Portal) to sign builds. A developer profile must be used to share a build for testing, and a distribution profile must be used to submit to the App store. If a build will not install on a device, the most likely cause of the issues are the following:
+1. The build was not signed with the correct certificate (Check the build settings).
+2. The device does not have the correct provisioning profile installed (This can be verified under settings on the device. XCode should install the correct on automatically, if the device is connected).
+3. The device has not been added to the provisioning profile.
+More information on the iOS developer program (and how to sign up) can be found here:
+http://developer.apple.com/ios
+
+
+Running with a phone connected:
+open AutonetMobile.xcodeproj in the iOS directory.
+Select iOS Device from the schemes menu.
+Plug in an iOS device.
+Press the "Run" button.
+
+Creating a Debug build:
+open AutonetMobile.xcodeproj in the iOS directory.
+Select iOS Device from the schemes menu.
+Select "Archive" from the "Product" menu.
+When the archive is complete, the "Organizer - Archives" window will appear.
+Select the archive you just created from the list, then press the "Share..." button
+Select the provisioning profile you wish to sign the build with, then click "Next".
+Save the archive. This build can now be shared via TestFlight or emailed (along with the provisioning profile) to people wishing to install and test on their device.
+
+Creating a Distribution build (for submission to the App Store):
+First, you must log into iTunes Connect (http://itunesconnect.apple.com) with your apple account.
+From here, click "Manage Your Applications"
+You must create a new app or a new version of an existing app (depending on what you are submitting).
+You will need to enter the app name, description, keywords and some more information about your application.
+Once you have entered all the info, and iTunes Connect tells you it is waiting for upload, proceed.
+open AutonetMobile.xcodeproj in the iOS directory.
+Select iOS Device from the schemes menu.
+Select "Archive" from the "Product" menu.
+When the archive is complete, the "Organizer - Archives" window will appear.
+Select the archive you just created from the list, then press the "Submit..." button
+XCode will have you log in to your developer account and walk you through the submission process.
+

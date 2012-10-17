@@ -1,0 +1,15 @@
+<div data-role="page" id='settings'>
+  <div data-role="header">
+    <h1>Settings</h1>
+  </div><!-- /header -->
+  <div data-role="content"> 
+    <ul data-role="listview" data-theme="g">
+      <li><a href='#' onclick='SettingsController.myAccount();'>My Account</a></li>
+      <li><a href='#' onclick='SettingsController.showUnits();'>My Cars</a></li>
+    </ul>
+    <br/>
+    <a href="#" onclick="KeychainController.showKeychain();" data-role="button">Go To Keychain</a>
+    <a href="#" data-role="button" onclick="AutonetApplication.logout();">Log Out</a>
+  </div>
+</div>
+

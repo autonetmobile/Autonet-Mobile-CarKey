@@ -1,0 +1,89 @@
+body {
+background: #73777e; /* Old browsers */
+background: -moz-linear-gradient(left, #73777e 0%, #adb1b7 99%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#73777e), color-stop(99%,#adb1b7)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, #73777e 0%,#adb1b7 99%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, #73777e 0%,#adb1b7 99%); /* Opera11.10+ */
+background: -ms-linear-gradient(left, #73777e 0%,#adb1b7 99%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#73777e', endColorstr='#adb1b7',GradientType=1 ); /* IE6-9 */
+background: linear-gradient(left, #73777e 0%,#adb1b7 99%); /* W3C */	
+	font-family: Verdana, Helvetica, sans-serif;
+	margin: 0px;
+	padding: 0px;
+}
+
+#wrap {	
+	max-width: 300px;
+	width: 100%;
+}
+
+#logo {
+	background: url(logo.png) center no-repeat;
+	height: 150px;
+	margin-bottom: -10px;
+	width: 300px;
+}
+
+#buttons {
+	padding: 20px;
+}
+
+table {
+	border: none;
+	border-collapse:collapse;
+	text-align: center;
+	width: 100%;
+}
+
+.buttonrowwrap {
+	background: rgba(0,0,0,0.2);
+	box-shadow: 0px 1px 0px rgba(255,255,255,0.15);
+	border-radius: 5px;
+	border: 1px solid #444;
+	margin-bottom: 10px;
+}
+
+td {
+	border-right: 1px solid #444;
+	border-top: none;
+	border-bottom: none;
+}
+
+td:last-child {
+	border: none;
+}
+
+a {
+	background: url(overlay.png) top center no-repeat;
+	color: rgba(255,255,255,0.8);
+	font-size: 14px;
+	display: block;
+	font-weight: normal;
+	line-height: 50px;
+	text-decoration: none;
+	text-shadow: rgba(0,0,0,0.2) 1px 0px 1px;
+	width: 100%;
+}
+
+a.button_unknown:hover, a.button_unknown:active {
+	background:url(gradient.png) top center no-repeat;
+	text-shadow: rgba(0,0,0,1.0) 0px 0px 10px;
+}
+
+a.button_on {
+	background: url(glow.png) bottom center no-repeat;
+	text-shadow: rgba(0,0,0,1.0) 0px 0px 10px;
+}
+
+a.button_on:hover, a.button_on:active {
+	background:url(glow_active.png) top center no-repeat;
+}
+
+a.button_off {
+	background: none;
+	color: rgba(255,255,255,0.3);
+}
+
+a.button_off:hover, a.button_off:active {
+	text-shadow: rgba(0,0,0,0.2) 1px 0px 1px;
+}

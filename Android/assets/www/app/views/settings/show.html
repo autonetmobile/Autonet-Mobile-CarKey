@@ -1,0 +1,45 @@
+<div data-role="page" id='unit-show'>
+  <div data-role="header">
+    <a href="#" onclick='AutonetApplication.backButtonWasPressed();' data-icon="arrow-l">Cancel</a>
+    <h1 id='title'>Autonet Mobile</h1>
+  </div><!-- /header -->
+  <div data-role="content">
+    <label for="nickname">Nickname:&nbsp;</label>
+    <span id="nickname"></span>
+    <div class='line-break'></div>
+    <label for="unitID">Serial Number:&nbsp;</label>
+    <span id="unitID"></span>
+    <div class='line-break'></div>
+    <label for="password">Password:&nbsp;</label>
+    <input type="password" name="password" id="password" value=""  />
+    <label for="controlled">Show in Keychain&nbsp;</label>
+    <input type="checkbox" name="controlled" id="controlled" />
+    <label for="update">Update Car Status at Startup&nbsp;</label>
+    <input type="checkbox" name="update" id="update" />
+    <label for="make">Make:&nbsp;</label>
+    <span id="make"></span>
+    <div class='line-break'></div>
+    <label for="model">Model:&nbsp;</label>
+    <span id="model"></span>
+    <div class='line-break'></div>
+    <label for="year">Year:&nbsp;</label>
+    <span id="year"></span>
+    <div class='line-break'></div>
+    <a href="#" onclick='SettingsController.saveButtonWasPressed();' data-role="button">Save</a>
+  </div>
+  <script type="text/javascript">
+    $('#unit-show').live('pagecreate', function() {
+      var unit = SettingsController.currentUnit;
+      $("#title").html(unit.getDisplayName());
+      $("#password").val(unit.attr('password'));
+      $("#controlled").prop('checked', unit.attr('controlled'));
+      $("#update").prop('checked', unit.attr('update'));
+      $("#nickname").html(unit.attr('nickname'));
+      $("#unitID").html(unit.attr('unitID'));
+      $("#make").html(unit.attr('make'));
+      $("#model").html(unit.attr('model'));
+      $("#year").html(unit.attr('year'));
+    });
+  </script>
+</div>
+

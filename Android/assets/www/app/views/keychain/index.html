@@ -1,0 +1,9 @@
+<div data-role="page" id='keychain' class='content'>
+  <script type='text/javascript'>
+    if (AutonetApplication.splashImageUrl) {
+        $('.content').css('background', "url(https://"+AutonetApplication.host + AutonetApplication.splashImageUrl + ")"); 
+    } else {
+      $('.content').css('background', "url(../" + AutonetApplication.splashScreenPath() + ")"); 
+    }
+  </script>
+</div>

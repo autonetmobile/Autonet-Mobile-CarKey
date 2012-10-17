@@ -1,0 +1,47 @@
+#popup_container {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        min-width: 275px !important; 
+        width:95% !important;
+/*        max-width:300px !important;*/
+        background: rgb(48, 48, 48) !important; 
+        background: rgba(48, 48, 48, .9) !important;
+        border: solid 2px #ededed;
+        color: #fdfdfd;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 3px #222;
+}
+#popup_panel{background: none !important; width:100% !important; margin:0; padding:0;}
+#popup_message {background: none !important; padding:1em !important;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  max-height:250px;}
+#popup_content{ background: none !important; padding: 0em !important; text-align:center;}
+#popup_prompt{display:relative; margin:1em auto 0;}
+#popup_message input[type="password"] {
+width:80% !important;
+}
+#popup_content.alert {background-image: none !important;
+}
+#popup_content.confirm {background-image: none !important;
+}
+#popup_content.prompt {background-image: none  !important;
+}
+#popup_ok, #popup_cancel { text-align:center !important; margin:.75em 1em 1.5em !important; font-size: 16px; width:82px; border:1px solid #222  !important;
+background: rgb(240,240,240) !important;
+background: -moz-linear-gradient(top,  rgba(240,240,240,1) 0%, rgba(186,187,186,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(240,240,240,1)), color-stop(100%,rgba(186,187,186,1))) !important;
+background: -webkit-linear-gradient(top,  rgba(240,240,240,1) 0%,rgba(186,187,186,1) 100%) !important;
+background: -o-linear-gradient(top,  rgba(240,240,240,1) 0%,rgba(186,187,186,1) 100%) !important;
+background: -ms-linear-gradient(top,  rgba(240,240,240,1) 0%,rgba(186,187,186,1) 100%) !important;
+background: linear-gradient(top,  rgba(240,240,240,1) 0%,rgba(186,187,186,1) 100%) !important;
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#babbba',GradientType=0 ) !important;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+border-radius: 3px;
+line-height:1.70em !important;
+padding:0 !important;
+}
+#popup_title { display: none !important;}

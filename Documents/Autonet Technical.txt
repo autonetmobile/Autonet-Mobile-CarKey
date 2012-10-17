@@ -1,0 +1,56 @@
+# Autonet Technical Architecture
+
+The Autonet Application will consist of two separate components, the Mobile Application and the Web Service.
+
+## Mobile Application
+
+The Mobile Application will be developed with PhoneGap, allowing simultaneous deployment to both Android and iOS using a shared codebase. The Mobile Application will be written in HTML, CSS, and Javascript, requesting additional resources from the Web Service as required. It will utilize Secure WebSockets to interact with the Autonet API through the Web Service.
+
+The Mobile Application will be divided in to two main sections, 'Settings' and 'Keychain'.
+
+The Settings section will be responsible for setting up and configuring the application. The user will enter their Autonet credentials along with their phone number and provider information. The user will then be provided with a list of vehicles to configure. The first time the user authenticates, they can select which vehicle(s) the device is to control. The user may then enter passwords for the vehicle, select a vehicle as the 'default' for this device, and select a background color for the vehicle. The user may also set the make, model, and year of the vehicle if it was not received from the server.
+
+The Keychain section is where the user will interact with their vehicles. It will have a selection box allowing the user to select from their vehicles. Upon selection, if the user has not saved a password for that vehicle, they will be prompted for one. Once the user has been authenticated for the vehicle, the keychain will load. The theme will be determined by the Web Service, upon providing the make/model/year and theme name. There will be a settings button, allowing the user to access the Settings section. The keychain will also have a 'Find My Car' button. Tapping this button will display your cars location on a map.
+
+On the first launch of the app, or in the event the user's authentication information is no longer valid, the user will be presented with the Settings section. On subsequent launches, the application will display the Keychain for the default vehicle.
+
+The Mobile Application will make use of PhoneGap's storage APIs to store user and vehicle data.
+
+## Web Service
+
+The web service will be deployed along side the Autonet servers and will facilitate communication from the Mobile Application to the Autonet API, provide theming information to the Mobile Application, and allow adding, removing, and customizing themes via a web interface.
+
+Two Toasters will host a 'staging' instance of the Web Service for development and testing purposes. Autonet shall be responsible for hosting the production version. Two Toasters will provide all information required to do so.
+
+### Components
+
+*  WebSocket to TCP Socket Proxy
+   
+   This will facilitate communication from javascript WebSockets to the Autonet TCP socket API. All communications will be done over TLS.
+   
+   We will be using a fork of the em-websocket-proxy gem that supports TLS communication both client and server side.
+   https://github.com/jeremyellison/em-websocket-proxy
+   
+
+*  Theme Engine
+   
+   The theme engine will be developed in Ruby on Rails and will allow the creation of different named 'themes'.
+   
+   *  Themes will consist of HTML5 and CSS3.
+      
+      By customizing the application in HTML and CSS, Autonet will have the maximum amount of flexibility in theming. This will have huge gains over developing an XML layout engine, allowing designers practically unbounded flexibility when it comes to developing new themes.
+      *  Buttons (links) will be required to have specified CSS ids. This will allow the mobile application to identify the buttons and execute the proper actions for each button.
+      *  Buttons (links) will have 3 states. These will be manipulated with css classes. The states (classes) will be 'button-on', 'button-off', and 'button-unknown'. They will represent the state of the vehicle. The mobile application will update the classes of these buttons as the user interacts with the vehicle.
+      *  Themes may contain additional (custom) buttons or links that link to a URL to be opened.
+      *  Each theme must have a 'settings' button, 'find_my_car' button, and a 'current_car' select tag.
+      
+   *  Themes can be saved as the default for a 'make', 'make/model', 'make/model/year', or be given a custom name.
+   *  Upon requesting a theme, the application will favor the theme 'name' requested. If a theme name is not requested, or a theme with that name does not exist, the application will look for a theme specified for the provided 'make/model/year' combination. If no such theme exists, the app will fall back to a theme matching the 'make/model', then simply the 'make'. If still no theme has been specified, the application will use a 'default' theme.
+   *  A default theme will be provided by Two Toasters along with customization instructions.
+   *  User Interface
+      *  Customization will be done via a web interface.
+      *  The web interface will be secured with HTTPAuth.
+      *  The user will enter custom HTML and CSS on a form, as well as a theme name or a brand/model/year combination, model and year being optional.
+      *  The user will have the option to preview or save their theme.
+      *  The user will be able to create a new theme or edit one from a list of themes.
+   * Themes will be aggressively cached on the client side for performance benefit.
